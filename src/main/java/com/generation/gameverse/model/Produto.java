@@ -40,6 +40,9 @@ public class Produto {
 	@Pattern(regexp = "^[^0-9].*", message = "O descricao não pode ser apenas numérico")
 	private String descricao;
 	
+	@NotBlank(message = "O atributo preco é obrigatório!")
+	private Double preco;
+
 	//TODO A Imagem deve ser um conjunto de recursos de midia para o usuario saber mais sobre o produto
 	@Column(length = 1000)
 	@Pattern(regexp = "^[^0-9].*", message = "A imagem não pode ser apenas numérico")
@@ -74,6 +77,14 @@ public class Produto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 	
 	public String getImg() {
