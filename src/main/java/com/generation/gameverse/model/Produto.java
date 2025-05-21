@@ -1,12 +1,11 @@
 package com.generation.gameverse.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,9 +13,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-//import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -39,9 +39,10 @@ public class Produto {
 	@Size(min = 10, max = 1000, message = "O atributo descricao deve ter no minimo 10 e no máximo 1000 caracteres.")
 	@Pattern(regexp = "^[^0-9].*", message = "O descricao não pode ser apenas numérico")
 	private String descricao;
-	
-	@NotBlank(message = "O atributo preco é obrigatório!")
-	private Double preco;
+
+	@NotNull(message = "O preço é obrigatório.") // Garante que não seja nulo
+	@DecimalMin(value = "0.01", message = "O preço deve ser positivo e maior que zero.") // Garante que seja um valor válido para preço
+	private BigDecimal preco;
 
 	//TODO A Imagem deve ser um conjunto de recursos de midia para o usuario saber mais sobre o produto
 	@Column(length = 1000)
@@ -78,12 +79,12 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
-	public Double getPreco() {
+
+	public BigDecimal getPreco() {
 		return preco;
 	}
 
-	public void setPreco(Double preco) {
+	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
 	
