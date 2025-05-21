@@ -1,24 +1,27 @@
 package com.generation.gameverse.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-//import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tb_categorias") // CREATE TABLE tb_postagens(); 
+@Table(name = "tb_categorias")
 public class Categoria {
 
 	@Id // Primary Key
@@ -27,7 +30,7 @@ public class Categoria {
 		
 	@Column(length = 100)
 	@NotBlank(message = "O atributo nome é obrigatório!")
-	@Size(min = 5, max = 100, message = "O atributo nome deve ter no minimo 5 e no máximo 100 caracteres.")
+	@Size(max = 100, message = "O atributo nome deve ter no minimo 5 e no máximo 100 caracteres.")
 	@Pattern(regexp = "^[^0-9].*", message = "O nome não pode ser apenas numérico")
 	private String nome;
 	
@@ -40,11 +43,16 @@ public class Categoria {
 	@UpdateTimestamp
 	private LocalDateTime data;
 
-	/*
-	@ManyToOne
-	@JsonIgnoreProperties("produto")
-	private Categoria categoria;
-	*/
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("categoria")
+	private List<Produto> produto;
+	
+	public List<Produto> getProduto() {
+		return produto;
+	}
+	public void setPostagem(List<Produto> produto) {
+		this.produto = produto;
+	}
 
 	public Long getId() {
 		return id;
@@ -78,14 +86,4 @@ public class Categoria {
 		this.data = data;
 	}
 
-	/*
-	public Categoria getTema() {
-		return tema;
-	}
-
-	public void setTema(Categoria tema) {
-		this.tema = tema;
-	}
-	*/
-	
 }

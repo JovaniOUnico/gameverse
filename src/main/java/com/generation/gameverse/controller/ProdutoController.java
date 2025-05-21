@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.gameverse.model.Produto;
+import com.generation.gameverse.repository.CategoriaRepository;
 import com.generation.gameverse.repository.ProdutoRepository;
 
 import jakarta.validation.Valid;
@@ -32,7 +33,7 @@ public class ProdutoController {
 	private ProdutoRepository produtoRepository;
 
 	@Autowired
-	//private TemaRepository temaRepository;
+	private CategoriaRepository categoriaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<Produto>> getAll() {
@@ -59,12 +60,12 @@ public class ProdutoController {
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
 
 
-		//if (temaRepository.existsById(postagem.getTema().getId())) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
-		//}
+		if (categoriaRepository.existsById(produto.getCategoria().getId())) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+		}
 		
 
-		//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Tema não existe!", null);
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A categoria não existe!", null);
 	}
 
 	@PutMapping
@@ -78,11 +79,11 @@ public class ProdutoController {
 		if (produtoRepository.existsById(produto.getId())) {
 			
 
-			//if (temaRepository.existsById(produto.getTema().getId()))
-			return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+			if (categoriaRepository.existsById(produto.getCategoria().getId()))
+				return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
 		
 
-			//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Tema não existe!", null);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A categoria não existe!", null);
 			
 		}
 

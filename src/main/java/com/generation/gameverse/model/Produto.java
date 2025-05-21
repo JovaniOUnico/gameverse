@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -11,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 //import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +21,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tb_produto") // CREATE TABLE tb_postagens(); 
+@Table(name = "tb_produto")
 public class Produto {
 
 	@Id // Primary Key
@@ -45,11 +48,9 @@ public class Produto {
 	@UpdateTimestamp
 	private LocalDateTime data;
 
-	/*
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
-	private Tema tema;
-	*/
+	private Categoria categoria;
 	
 	public Long getId() {
 		return id;
@@ -91,14 +92,12 @@ public class Produto {
 		this.data = data;
 	}
 
-	/*
-	public Tema getTema() {
-		return tema;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setTema(Tema tema) {
-		this.tema = tema;
+	public void setTema(Categoria categoria) {
+		this.categoria = categoria;
 	}
-	*/
 	
 }
